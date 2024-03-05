@@ -5,20 +5,21 @@ import axios from 'axios'
 
 const { Search } = Input;
 
-function SearchPage() {
-  const [value,setValue] = useState("");
+function SearchPage() {  
   const [state,setState] = useState("title");
+  const [data,setData] = useState("result");
   
-  async function onSearch() {
-    const json = {"word": value};    
-    const {data} = await axios.post('http://localhost:8080/apis/search', json);
-    setValue(data);
-  };
-  function onHandle(e) {
-    setValue(e.target.value);
+  async function onSearch(values) {
+    const json = {"word":values,"title":state};
+    console.log(json);    
+    const response = await axios.post('http://localhost:8080/apis/search/', json);
+    if (response === "") {
+      setData("no result");
+    } else {
+      setData(response);
+    };
   };
   function onChange(e) {
-    console.log(`radio checked:${e.target.value}`);
     if (e.target.value === "a") {
       setState("title");
     } else {
@@ -28,16 +29,17 @@ function SearchPage() {
   return (
       <div>
       <p>検索ページ</p>
-      <Space direction="vertical">        
+      <Space direction="vertical">                
           <Radio.Group onChange={onChange} defaultValue="a">
           <Radio.Button value="a">タイトル</Radio.Button>
           <Radio.Button value="b">本文から</Radio.Button>
-          </Radio.Group>
-          {state}
+          </Radio.Group>        
+          {state}        
           <Search placeholder="input search text" onSearch={onSearch} 
-            onChange={onHandle} enterButton value={value} />
+            enterButton />        
       </Space>
       <br />
+      {data}<br />
       <Link to="/">戻る</Link>
       </div>
   )
