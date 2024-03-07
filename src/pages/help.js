@@ -1,10 +1,14 @@
 import React from 'react';
 import { Link } from 'gatsby'
 import { Input, Form, Button } from 'antd'
+import axios from 'axios';
 
 const { TextArea } = Input;
 function HelpPage() {
-    const onFinish = values => console.log(values)
+    async function onFinish(values) {
+        console.log(values);
+        await axios.post("http://localhost:8080/apis/help",values);
+    }
     return (
         <>
         <p>訪問者の皆さん<br />

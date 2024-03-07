@@ -1,16 +1,23 @@
 import React from 'react';
 import {Input,Form,Button} from 'antd';
+import axios from 'axios'
 
 const {TextArea} = Input;
 function Register() {
-    const onFinish = values => console.log(values);
+    async function onFinish(values) {
+        console.log(values);    
+        await axios.post("http://localhost:8080/apis/register",values);
+    };
     return (
         <>
             <Form onFinish={onFinish}>
                 <Form.Item name="name" label="お名前">
                     <Input />
                 </Form.Item>
-                <Form.Item name="text" label="本文：">
+                <Form.Item name="comment" label="本文：">
+                    <TextArea></TextArea>
+                </Form.Item>
+                <Form.Item name="code" label="コード">
                     <TextArea></TextArea>
                 </Form.Item>
                 <Form.Item>
@@ -20,22 +27,28 @@ function Register() {
         </>
     )
 }
-function TopPage() {
-    const title = {"title":""};
-    var list = [];
-    const data = list.map((json)=>
-        <>
-            お名前：{json.name}：：日付{json.date}
-            {json.comment}
-            {json.code}
+async function TopPage() {    
+    const json = await axios.get("http://localhost:8080/apis/articles/2");   
+    const title = json.title;
+    const list = [];
+    const comments = json.comments;
+    console.log(comments);    
+    for (var i=0;i<comments.length;i++) list.push([i,comments[i]]);
+    const field = list.map(res => {
+        return (
+            <>
+            お名前({res.name})：：日付{res.date}
+            {res.comment}
+            {res.code}
             <hr />
-        </>
-    );
+            </>
+        )
+    });
     return (
         <>
             <Register />
-            {title.title}
-            {data}
+            {title}
+            <p>{field}</p>
             <a href='/'>もどる</a>
         </>
     )
