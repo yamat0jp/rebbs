@@ -5,7 +5,7 @@ function IndexPage() {
   return (
     <>
       <h1>無料電子掲示板へようこそ</h1>
-      <Link to="/threads">BBS</Link>
+      <Link to="/bbs">BBS</Link>
       <br />
       <Link to="/search">検索ページ</Link>
       <hr />
