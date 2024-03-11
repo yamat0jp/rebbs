@@ -1,8 +1,18 @@
 import React,{useEffect, useState} from 'react';
 import {Input,Form,Button} from 'antd';
-import axios from 'axios'
+import axios from 'axios';
+import parse from 'html-react-parser';
+import Highlight from 'react-highlight';
 
 const {TextArea} = Input;
+const layout = {
+    labelCol: {
+        span:8,
+    },
+    wrapperCol:{
+        span:16,
+    },    
+};
 function Register(props) {
     async function onFinish(values) { 
         const json = {"titlenum":props.titlenum,"title":props.title,
@@ -12,17 +22,17 @@ function Register(props) {
     };
     return (
         <>
-            <Form onFinish={onFinish}>
+            <Form {...layout} style={{maxWidth:600,}} onFinish={onFinish}>
                 <Form.Item name="name" label="お名前">
                     <Input />
                 </Form.Item>
-                <Form.Item name="comment" label="本文：">
+                <Form.Item name="comment" label="本　文：">
                     <TextArea></TextArea>
                 </Form.Item>
                 <Form.Item name="code" label="コード">
                     <TextArea></TextArea>
                 </Form.Item>
-                <Form.Item>
+                <Form.Item wrapperCol={{...layout.wrapperCol,offset:8}}>
                     <Button type="primary" htmlType='submit'>送信</Button>
                 </Form.Item>
             </Form>
@@ -38,12 +48,16 @@ function TopPage(props) {
             const json = await axios.get("http://localhost:8080/apis/articles/"+num);                                           
             console.log(json.data.title);
             setTitle(json.data.title);    
-            const field = json.data.comments.map(res => {
+            const field = json.data.comments.map(res => {                               
+                const comment = parse(res.comment)
+                const code = parse(res.code);                            
                 return (
                     <>
-                    お名前({res.name})：：日付{res.date}
-                    {res.comment}
-                    {res.code}
+                    お名前({res.name})::日付{res.date}
+                    {comment}
+                    <Highlight className='delphi'>
+                        {code}
+                    </Highlight>
                     <hr />
                     </>
                 )
