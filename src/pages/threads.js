@@ -3,6 +3,7 @@ import {Input,Form,Button} from 'antd';
 import axios from 'axios';
 import parse from 'html-react-parser';
 import Highlight from 'react-highlight';
+import 'highlight.js/styles/github-dark.css';
 
 const {TextArea} = Input;
 const layout = {
@@ -39,10 +40,10 @@ function Register(props) {
         </>
     )
 }
-function TopPage(props) {    
+function TopPage() {    
     const [value,setValue] = useState([]);
     const [title,setTitle] = useState("");
-    const num = 2;
+    const num = 2;    
     useEffect(()=>{
         async function Mount() {
             const json = await axios.get("http://localhost:8080/apis/articles/"+num);                                           
@@ -50,14 +51,16 @@ function TopPage(props) {
             setTitle(json.data.title);    
             const field = json.data.comments.map(res => {                               
                 const comment = parse(res.comment)
-                const code = parse(res.code);                            
+                let code;
+                if (res.code != "") {
+                    const item = parse(res.code);
+                    code = <Highlight style={{}} className="delphi">{item}</Highlight>;                    
+                };
                 return (
                     <>
                     お名前({res.name})::日付{res.date}
                     {comment}
-                    <Highlight className='delphi'>
-                        {code}
-                    </Highlight>
+                    {code}
                     <hr />
                     </>
                 )
