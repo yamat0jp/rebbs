@@ -18,28 +18,33 @@ function SearchPage() {
     if (res.data.response.length === 0) {
       setData("no result");
     } else {
-      setData(res.data.response.map(user => {
-        setTitle(res.data.title);
+      setData(res.data.response.map(user => {                
+        setTitle(res.data.title);        
+        console.log(user.code);
+        let item;
+        if (user.code != "") {
+          const code = parse(user.code);
+          item = <Highlight className='delphi'>{code}</Highlight>;        
+        } else {
+          item = <></>;
+        }
         return (
           <>            
             {title}<br />
             ({user.cmnumber}){user.name}{user.date}<br />
             <p>{parse(user.comment)}</p>
-            <Highlight className='delphi'>{parse(user.code)}</Highlight>
+            <>{item}</>
             <hr />
           </>
         )
       }));
     };
   };
-  function onChange(e) {
-    setValue(e.target.value);
-  }
   return (
       <div>
       <p>検索ページ</p>
       <Space direction="vertical">                
-          <Radio.Group onChange={onChange} defaultValue="a">
+          <Radio.Group onChange={(e) => setValue(e.target.value)} defaultValue="title">
           <Radio.Button value="title">タイトル</Radio.Button>
           <Radio.Button value="text">本文から</Radio.Button>
           </Radio.Group>                  

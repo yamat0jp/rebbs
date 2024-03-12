@@ -54,7 +54,7 @@ function TopPage() {
                 let code;
                 if (res.code != "") {
                     const item = parse(res.code);
-                    code = <Highlight style={{}} className="delphi">{item}</Highlight>;                    
+                    code = <><Highlight className="delphi">{item}</Highlight></>;                    
                 };
                 return (
                     <>
