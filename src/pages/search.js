@@ -7,35 +7,34 @@ import Highlight from 'react-highlight';
 
 const { Search } = Input;
 
-function SearchPage() {  
-  const [title,setTitle] = useState("");  
+function SearchPage() {    
   const [data,setData] = useState("result");  
   const [value,setValue] = useState("title");
   async function onSearch(values) {     
-    const json = {"word":values,"title":value};    
-    console.log(json);
-    const res = await axios.post('http://localhost:8080/apis/search/', json);    
-    if (res.data.response.length === 0) {
+    const json = {"word":values,"title":value};        
+    const res = await axios.post('http://localhost:8080/apis/search/', json);            
+    if (res.data.response.length === 0) {      
       setData("no result");
     } else {
+      let count = 0;
       setData(res.data.response.map(user => {                
-        setTitle(res.data.title);        
-        console.log(user.code);
+        count++;                
         let item;
-        if (user.code != "") {
+        if (user.code !== "") {
           const code = parse(user.code);
           item = <Highlight className='delphi'>{code}</Highlight>;        
         } else {
           item = <></>;
         }
+        if (count % 5 === 0) item = <div>{item}<hr /><p style={{textAlign:"center"}}><Link to="/">back</Link></p></div>;
         return (
-          <>            
-            {title}<br />
-            ({user.cmnumber}){user.name}{user.date}<br />
-            <p>{parse(user.comment)}</p>
-            <>{item}</>
+          <div key={count}>                        
+            (<Link to={"/threads/"+user.number}>{user.db}-{user.number}</Link>)
+            {user.name}{user.date}<br />
+            <div>{parse(user.comment)}</div>
+            <div>{item}</div>
             <hr />
-          </>
+          </div>
         )
       }));
     };
@@ -51,8 +50,7 @@ function SearchPage() {
           <Search placeholder="input search text" onSearch={onSearch} 
             enterButton />        
       </Space>      
-      <hr />
-      {title}
+      <hr />      
       {data}<br />
       <Link to="/">戻る</Link>
       </div>

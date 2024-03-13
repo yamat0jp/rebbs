@@ -4,6 +4,7 @@ import axios from 'axios';
 import parse from 'html-react-parser';
 import Highlight from 'react-highlight';
 import 'highlight.js/styles/github-dark.css';
+import { Link } from 'gatsby';
 
 const {TextArea} = Input;
 const layout = {
@@ -49,20 +50,23 @@ function TopPage() {
             const json = await axios.get("http://localhost:8080/apis/articles/"+num);                                           
             console.log(json.data.title);
             setTitle(json.data.title);    
-            const field = json.data.comments.map(res => {                               
+            let count = 0;
+            const field = json.data.comments.map(res => {                                               
+                count++;
                 const comment = parse(res.comment)
-                let code;
-                if (res.code != "") {
+                let code;                
+                if (res.code !== "") {
                     const item = parse(res.code);
-                    code = <><Highlight className="delphi">{item}</Highlight></>;                    
+                    code = <Highlight className="delphi">{item}</Highlight>;                    
                 };
-                return (
-                    <>
+                if (count % 5 === 0) code = <>{code}<hr /><p style={{textAlign:"center"}}><Link to="/">back</Link></p></>;
+                return (                    
+                    <li key={count}>
                     お名前({res.name})::日付{res.date}
                     {comment}
                     {code}
                     <hr />
-                    </>
+                    </li>
                 )
             });
             setValue(field);
@@ -73,7 +77,7 @@ function TopPage() {
         <>
             <Register title={title} titlenum={num} />
             {title}
-            <p>{value}</p>
+            {value}
             <a href='/'>もどる</a>
         </>
     )
