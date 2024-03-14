@@ -5,6 +5,7 @@ import parse from 'html-react-parser';
 import Highlight from 'react-highlight';
 import 'highlight.js/styles/github-dark.css';
 import { Link } from 'gatsby';
+import "./threads.css";
 
 const {TextArea} = Input;
 const layout = {
@@ -57,16 +58,16 @@ function TopPage() {
                 let code;                
                 if (res.code !== "") {
                     const item = parse(res.code);
-                    code = <Highlight className="delphi">{item}</Highlight>;                    
+                    code = <div className="code"><Highlight className="delphi">{item}</Highlight></div>;                    
                 };
                 if (count % 5 === 0) code = <>{code}<hr /><p style={{textAlign:"center"}}><Link to="/">back</Link></p></>;
                 return (                    
-                    <li key={count}>
-                    お名前({res.name})::日付{res.date}
+                    <div key={count}>
+                    [{res.number}]お名前({res.name})::日付{res.date}
                     {comment}
                     {code}
                     <hr />
-                    </li>
+                    </div>
                 )
             });
             setValue(field);
@@ -78,7 +79,7 @@ function TopPage() {
             <Register title={title} titlenum={num} />
             {title}
             {value}
-            <a href='/'>もどる</a>
+            <Link to='/'>もどる</Link>
         </>
     )
 }
