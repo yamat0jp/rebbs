@@ -15,8 +15,12 @@
     "clean": "gatsby clean"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.4",
+    "firebase": "^10.8.1",
+    "firebase-tools": "^13.5.0",
     "gatsby": "^5.13.3",
     "gatsby-plugin-antd": "^2.2.0",
+    "gatsby-theme-firebase": "^1.0.10",
     "highlight.js": "^11.9.0",
     "html-react-parser": "^5.1.8",
     "punycode": "^2.3.1",

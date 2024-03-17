@@ -1,6 +1,6 @@
-import React,{useEffect, useState} from 'react'
-import axios from 'axios'
-import {Link} from 'gatsby'
+import React,{useEffect, useState} from 'react';
+import axios from 'axios';
+import {Link} from 'gatsby';
 
 function TitlePage() {
     const [value,setValue] = useState([]);

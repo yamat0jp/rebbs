@@ -1,6 +1,8 @@
 import React from 'react';
 import { AudioOutlined } from '@ant-design/icons';
 import { Input, Space } from 'antd';
+import { useAuth0 } from '@auth0/auth0-react';
+
 const { Search } = Input;
 const suffix = (
   <AudioOutlined
@@ -56,4 +58,24 @@ const App = () => (
   </Space>
     </div>
 );
+function LoginButton() {    
+  const { isLoading, isAuthenticated, error, user, loginWithRedirect, logout } =
+    useAuth0();    
+  if (isAuthenticated) {
+    return (     
+      <button onClick={() => {
+        logout({
+          logoutParams: {
+            returnTo: "https://localhost:8000/bbs"
+          }
+        });
+      } }>Log out</button>      
+    )
+  } else {
+    return (
+    <button onClick={loginWithRedirect}>Log in</button>      
+  )
+  }
+}
 export default App;
+export {LoginButton};
